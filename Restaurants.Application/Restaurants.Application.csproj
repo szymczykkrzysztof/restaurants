@@ -10,4 +10,9 @@
       <ProjectReference Include="..\Restaurants.Domain\Restaurants.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="16.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.1" />
+    </ItemGroup>
+
 </Project>

@@ -1,27 +1,15 @@
-﻿version: "3.9"
-
 services:
-  postgres:
-    image: postgres:17
-    container_name: postgres17-restaurants
-    restart: unless-stopped
-
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64
     ports:
-      - "${POSTGRES_PORT}:5432"
-
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD}
+      MSSQL_PID: "Developer"
     volumes:
-      - postgres17_data-ecom:/var/lib/postgresql/data
-
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      - sqlserver_data:/var/opt/mssql
 
 volumes:
-  postgres17_data-ecom:
+  sqlserver_data:
