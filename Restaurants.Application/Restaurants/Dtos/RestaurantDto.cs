@@ -1,8 +1,9 @@
+using MediatR;
 using Restaurants.Application.Dishes.Dtos;
 
 namespace Restaurants.Application.Restaurants.Dtos;
 
-public class RestaurantDto
+public class RestaurantDto : IRequest
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
