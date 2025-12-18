@@ -18,6 +18,7 @@ public static class ServiceCollectionExtensions
                 .EnableSensitiveDataLogging();
         });
         services.AddScoped<IRestaurantSeeder, RestaurantSeeder>();
+        services.AddScoped<IDishesRepository, DishesRepository>();
         services.AddScoped<IRestaurantsRepository, RestaurantsRepository>();
     }
 }
