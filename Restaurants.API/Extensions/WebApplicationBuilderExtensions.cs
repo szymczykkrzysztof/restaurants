@@ -1,5 +1,10 @@
+using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Restaurants.API.Middlewares;
+using Restaurants.API.Services;
 
 namespace Restaurants.API.Extensions;
 
@@ -7,7 +12,33 @@ public static class WebApplicationBuilderExtensions
 {
     public static void AddPresentation(this WebApplicationBuilder builder)
     {
-        builder.Services.AddAuthentication();
+        builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                var jwt = builder.Configuration.GetSection("Jwt");
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+
+                    ValidIssuer = jwt["Issuer"],
+                    ValidAudience = jwt["Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(jwt["Key"]!)
+                    ),
+
+                    // 🔑 KLUCZOWE
+                    RoleClaimType = ClaimTypes.Role,
+                    NameClaimType = ClaimTypes.Email
+                };
+            });
         builder.Services.AddControllers();
         builder.Services.AddSwaggerGen(c =>
         {
@@ -15,6 +46,9 @@ public static class WebApplicationBuilderExtensions
             {
                 Type = SecuritySchemeType.Http,
                 Scheme = "Bearer",
+                BearerFormat = "JWT",
+                Name = "Authorization",
+                In = ParameterLocation.Header,
             });
             c.AddSecurityRequirement(document => new OpenApiSecurityRequirement
             {
@@ -23,5 +57,6 @@ public static class WebApplicationBuilderExtensions
         });
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddScoped<ErrorHandlingMiddleware>();
+        builder.Services.AddTransient<JwtTokenService>();
     }
 }
