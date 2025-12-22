@@ -1,80 +1,29 @@
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
-using Restaurants.API.Dtos;
-using Restaurants.API.Services;
-using Restaurants.Domain.Entities;
+using Restaurants.Application.Authorization.Commands.LoginUser;
+using Restaurants.Application.Authorization.Commands.RegisterUser;
 
 namespace Restaurants.API.Controllers;
 
 [ApiController]
 [Route("api/auth")]
-public class AuthController(
-    UserManager<User> userManager,
-    JwtTokenService jwt) : ControllerBase
+public class AuthController(IMediator mediator) : ControllerBase
 {
     [AllowAnonymous]
     [HttpPost("register")]
-    public async Task<IActionResult> Register(RegisterDto request)
+    public async Task<IActionResult> Register([FromBody] RegisterUserCommand request)
     {
-        if (request.Password != request.ConfirmPassword)
-            return BadRequest("Passwords do not match");
-
-        var existingUser = await userManager.FindByEmailAsync(request.Email);
-        if (existingUser != null)
-            return Conflict("User already exists");
-
-        var user = new User
-        {
-            UserName = request.Email,
-            Email = request.Email
-        };
-
-        var result = await userManager.CreateAsync(user, request.Password);
-
-        if (!result.Succeeded)
-            return BadRequest(result.Errors);
-        var adminExists = (await userManager.GetUsersInRoleAsync("Admin")).Any();
-        if (!adminExists)
-        {
-            await userManager.AddToRoleAsync(user, "Admin");
-        }
-        else
-        {
-            await userManager.AddToRoleAsync(user, "User");
-        }
-
-        // 🔹 (opcjonalnie) domyślny claim
-        await userManager.AddClaimAsync(user,
-            new System.Security.Claims.Claim("permission", "restaurants.read"));
-        
-        var token = await jwt.GenerateTokenAsync(user);
-
-        return Ok(new AuthResponseDto(
-            TokenType: "Bearer",
-            AccessToken: token,
-            ExpiresIn: 3600
-        ));
+        await mediator.Send(request);
+        return Created();
     }
+
+
     [HttpPost("login")]
-    public async Task<IActionResult> Login(LoginRequest request)
+    public async Task<IActionResult> Login([FromBody] LoginUserCommand request)
     {
-        var user = await userManager.FindByEmailAsync(request.Email);
-        if (user == null)
-            return Unauthorized();
+        var response = await mediator.Send(request);
 
-        var valid = await userManager.CheckPasswordAsync(user, request.Password);
-        if (!valid)
-            return Unauthorized();
-
-        var token = await jwt.GenerateTokenAsync(user);
-
-        return Ok(new
-        {
-            tokenType = "Bearer",
-            accessToken = token,
-            expiresIn = 3600
-        });
+        return Ok(response);
     }
 }

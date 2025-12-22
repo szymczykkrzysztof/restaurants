@@ -1,6 +1,9 @@
+using Microsoft.Extensions.Configuration;
+using Restaurants.Application.Authorization;
 using Restaurants.Domain.Entities;
+using Restaurants.Domain.Services;
 
-namespace Restaurants.API.Services;
+namespace Restaurants.Infrastructure.Services;
 
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -11,7 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 public class JwtTokenService(
     IConfiguration config,
     UserManager<User> userManager,
-    RoleManager<IdentityRole> roleManager)
+    RoleManager<IdentityRole> roleManager) : IJwtTokenService
 {
     public async Task<string> GenerateTokenAsync(User user)
     {
@@ -52,7 +55,7 @@ public class JwtTokenService(
             issuer: jwt["Issuer"],
             audience: jwt["Audience"],
             claims: claims,
-            expires: DateTime.UtcNow.AddHours(1),
+            expires: DateTime.UtcNow.AddMilliseconds(Convert.ToDouble(jwt["ExpirationMs"])),
             signingCredentials: creds
         );
 

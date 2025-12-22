@@ -10,6 +10,24 @@ public class ErrorHandlingMiddleware(ILogger<ErrorHandlingMiddleware> logger) : 
         {
             await next.Invoke(context);
         }
+        catch (UserNotAuthorizedException ex)
+        {
+            context.Response.StatusCode = 401;
+            await context.Response.WriteAsync(ex.Message);
+            logger.LogWarning(ex, ex.Message);
+        }
+        catch (UserAlreadyExistException ex)
+        {
+            context.Response.StatusCode = 409;
+            await context.Response.WriteAsync(ex.Message);
+            logger.LogWarning(ex, ex.Message);
+        }
+        catch (PasswordMismatchException ex)
+        {
+            context.Response.StatusCode = 400;
+            await context.Response.WriteAsync(ex.Message);
+            logger.LogWarning(ex, ex.Message);
+        }
         catch (NotFoundException ex)
         {
             context.Response.StatusCode = 404;

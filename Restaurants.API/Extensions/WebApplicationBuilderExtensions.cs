@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Restaurants.API.Middlewares;
-using Restaurants.API.Services;
 
 namespace Restaurants.API.Extensions;
 
@@ -57,6 +56,6 @@ public static class WebApplicationBuilderExtensions
         });
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddScoped<ErrorHandlingMiddleware>();
-        builder.Services.AddTransient<JwtTokenService>();
+     
     }
 }
