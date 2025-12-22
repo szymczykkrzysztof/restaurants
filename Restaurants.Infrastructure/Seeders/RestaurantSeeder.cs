@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Restaurants.Domain.Constants;
 using Restaurants.Domain.Entities;
 using Restaurants.Infrastructure.Persistence;
 
@@ -23,7 +24,7 @@ public class RestaurantSeeder(RestaurantsDbContext dbContext) : IRestaurantSeede
     {
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-        string[] roles = { "User", "Admin" };
+        string[] roles = { UserRoles.User, UserRoles.Owner, UserRoles.Admin };
 
         foreach (var role in roles)
         {
