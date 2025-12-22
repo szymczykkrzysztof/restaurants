@@ -4,8 +4,7 @@ using Restaurants.Domain.Contracts;
 using Restaurants.Domain.Entities;
 using Restaurants.Domain.Exceptions;
 
-
-namespace Restaurants.Application.Authorization.Commands.RegisterUser;
+namespace Restaurants.Application.Users.Commands.RegisterUser;
 
 public class RegisterUserCommandHandler(
     UserManager<User> userManager,

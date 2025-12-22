@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Configuration;
-using Restaurants.Application.Authorization;
 using Restaurants.Domain.Contracts;
 using Restaurants.Domain.Entities;
 
@@ -36,7 +35,7 @@ public class JwtTokenService(
         foreach (var role in roles)
         {
             claims.Add(new Claim(ClaimTypes.Role, role));
-            
+
             var identityRole = await roleManager.FindByNameAsync(role);
             if (identityRole != null)
             {

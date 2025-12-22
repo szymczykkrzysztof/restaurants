@@ -1,4 +1,4 @@
-namespace Restaurants.Application.Authorization.Dtos;
+namespace Restaurants.Application.Users.Commands.Dtos;
 
 public record AuthResponseDto(
     string TokenType,

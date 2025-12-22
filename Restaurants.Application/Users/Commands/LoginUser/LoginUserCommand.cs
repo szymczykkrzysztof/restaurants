@@ -1,7 +1,7 @@
 using MediatR;
-using Restaurants.Application.Authorization.Dtos;
+using Restaurants.Application.Users.Commands.Dtos;
 
-namespace Restaurants.Application.Authorization.Commands.LoginUser;
+namespace Restaurants.Application.Users.Commands.LoginUser;
 
 public class LoginUserCommand:IRequest<AuthResponseDto>
 {

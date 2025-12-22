@@ -1,6 +1,7 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Restaurants.Application.Restaurants.Commands.CreateRestaurant;
+using Restaurants.Application.Users;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 namespace Restaurants.Application.Extensions;
@@ -14,5 +15,7 @@ public static class ServiceCollectionExtension
         services.AddAutoMapper(_ => { }, applicationAssembly);
         services.AddValidatorsFromAssemblyContaining<CreateRestaurantCommandValidator>()
             .AddFluentValidationAutoValidation();
+        services.AddScoped<IUserContext, UserContext>();
+        services.AddHttpContextAccessor();
     }
 }

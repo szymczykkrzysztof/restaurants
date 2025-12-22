@@ -1,7 +1,6 @@
-using System.Security.AccessControl;
 using MediatR;
 
-namespace Restaurants.Application.Authorization.Commands.RegisterUser;
+namespace Restaurants.Application.Users.Commands.RegisterUser;
 
 public class RegisterUserCommand : IRequest<string>
 {

@@ -1,12 +1,12 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using Restaurants.Application.Authorization.Dtos;
+using Restaurants.Application.Users.Commands.Dtos;
 using Restaurants.Domain.Contracts;
 using Restaurants.Domain.Entities;
 using Restaurants.Domain.Exceptions;
 
-namespace Restaurants.Application.Authorization.Commands.LoginUser;
+namespace Restaurants.Application.Users.Commands.LoginUser;
 
 public class LoginUserCommandHandler(
     IConfiguration config,

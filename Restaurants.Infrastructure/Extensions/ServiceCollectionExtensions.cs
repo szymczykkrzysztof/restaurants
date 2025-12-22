@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Restaurants.Application.Authorization;
 using Restaurants.Domain.Contracts;
 using Restaurants.Infrastructure.Services;
 using Restaurants.Domain.Entities;
