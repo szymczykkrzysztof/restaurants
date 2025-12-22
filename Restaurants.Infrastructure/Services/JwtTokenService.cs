@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Restaurants.Application.Authorization;
+using Restaurants.Domain.Contracts;
 using Restaurants.Domain.Entities;
-using Restaurants.Domain.Services;
 
 namespace Restaurants.Infrastructure.Services;
 

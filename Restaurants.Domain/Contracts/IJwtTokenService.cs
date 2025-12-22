@@ -1,6 +1,6 @@
 using Restaurants.Domain.Entities;
 
-namespace Restaurants.Domain.Services;
+namespace Restaurants.Domain.Contracts;
 
 public interface IJwtTokenService
 {

@@ -1,8 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Restaurants.Domain.Contracts;
 using Restaurants.Domain.Entities;
 using Restaurants.Domain.Exceptions;
-using Restaurants.Domain.Services;
 
 
 namespace Restaurants.Application.Authorization.Commands.RegisterUser;

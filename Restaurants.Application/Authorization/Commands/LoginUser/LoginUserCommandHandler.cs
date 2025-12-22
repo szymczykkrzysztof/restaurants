@@ -2,9 +2,9 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Restaurants.Application.Authorization.Dtos;
+using Restaurants.Domain.Contracts;
 using Restaurants.Domain.Entities;
 using Restaurants.Domain.Exceptions;
-using Restaurants.Domain.Services;
 
 namespace Restaurants.Application.Authorization.Commands.LoginUser;
 
