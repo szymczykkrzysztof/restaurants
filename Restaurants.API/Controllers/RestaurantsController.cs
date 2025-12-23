@@ -8,6 +8,7 @@ using Restaurants.Application.Restaurants.Dtos;
 using Restaurants.Application.Restaurants.Queries.GetAllRestaurants;
 using Restaurants.Application.Restaurants.Queries.GetRestaurantById;
 using Restaurants.Domain.Constants;
+using Restaurants.Infrastructure.Authorization;
 
 namespace Restaurants.API.Controllers;
 
@@ -18,6 +19,7 @@ public class RestaurantsController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<RestaurantDto>))]
+    [Authorize(Policy = PolicyNames.AtLeast20)]
     public async Task<IActionResult> GetAll()
     {
         var restaurants = await mediator.Send(new GetAllRestaurantsQuery());
@@ -27,6 +29,7 @@ public class RestaurantsController(IMediator mediator) : ControllerBase
     [HttpGet("{id:int}", Name = "GetRestaurantById")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RestaurantDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize(Policy = PolicyNames.HasNationality)]
     public async Task<IActionResult> GetById([FromRoute] int id)
     {
         var restaurant = await mediator.Send(new GetRestaurantByIdQuery(id));

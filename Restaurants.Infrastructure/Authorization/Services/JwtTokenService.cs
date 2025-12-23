@@ -1,14 +1,13 @@
-using Microsoft.Extensions.Configuration;
-using Restaurants.Domain.Contracts;
-using Restaurants.Domain.Entities;
-
-namespace Restaurants.Infrastructure.Services;
-
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Restaurants.Domain.Contracts;
+using Restaurants.Domain.Entities;
+
+namespace Restaurants.Infrastructure.Authorization.Services;
 
 public class JwtTokenService(
     IConfiguration config,
@@ -23,13 +22,15 @@ public class JwtTokenService(
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id),
             new Claim(JwtRegisteredClaimNames.Email, user.Email!),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            //Custom claims
+            new Claim(AppClaimTypes.Nationality, user.Nationality ?? ""),
+            new Claim(AppClaimTypes.DateOfBirth, user.DateOfBirth?.ToString("yyyy-MM-dd") ?? string.Empty)
         };
-
+        
         // 🔹 Claims użytkownika
         var userClaims = await userManager.GetClaimsAsync(user);
         claims.AddRange(userClaims);
-
         // 🔹 Role użytkownika
         var roles = await userManager.GetRolesAsync(user);
         foreach (var role in roles)
